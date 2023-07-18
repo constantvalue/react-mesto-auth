@@ -1,0 +1,14 @@
+.register__input{
+  margin: 0;
+  margin-bottom: 15px;
+  padding: 0;
+  width: 100%;
+  background: none;
+  border: none;
+  padding-bottom:13px;
+  border-bottom: 2px solid rgba(204, 204, 204, 1);
+}
+
+.register__input:last-child{
+  margin-bottom: 0;
+}

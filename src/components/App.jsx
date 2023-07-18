@@ -8,8 +8,13 @@ import { api } from "../utils/Api";
 import { EditProfilePopup } from "./EditProfilePopup";
 import { EditAvatarPopup } from "./EditAvatarPopup";
 import { AddPlacePopup } from "./AddPlacePopup";
+import { InfoTooltip } from "./InfoTooltip";
+import { Register } from "./Register";
+import { Route, Routes } from "react-router-dom";
+import { Login } from "./Login";
 
 function App() {
+  const [isInfotooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(true);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -68,6 +73,7 @@ function App() {
 
   //эта функция будет вызываться на каждом компоненте с попапом. Служит для закрытия по клику на крестик.
   function closeAllPopups() {
+    setIsInfotooltipPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
@@ -140,16 +146,27 @@ function App() {
     <>
       <CurrentUserContext.Provider value={currentUser}>
         <Header></Header>
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          // пробросили хэндлер клика по карточке через пропсы компонентов  Main -> Card
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          cards={cards}
-          onCardDelete={handleCardDelete}
-        />
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Main
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                cards={cards}
+                onCardDelete={handleCardDelete}
+              />
+            }
+          />
+          <Route path="/signup" element={<Register />} />
+          <Route path="/signin" element={<Login />} />
+          <Route path="*" />
+        </Routes>
+
         <Footer></Footer>
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
@@ -170,6 +187,13 @@ function App() {
         />
 
         <ImagePopup onClose={closeAllPopups} card={selectedCard}></ImagePopup>
+
+        <InfoTooltip
+          name={"popup-tooltip"}
+          isOpen={isInfotooltipPopupOpen}
+          onClose={closeAllPopups}
+          title={"Вы успешно зарегистрировались!"}
+        />
       </CurrentUserContext.Provider>
     </>
   );
