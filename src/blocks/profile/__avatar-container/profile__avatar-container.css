@@ -1,0 +1,22 @@
+.profile__avatar-container {
+  border-radius: 50%;
+  position: relative;
+  grid-area: avatar;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+}
+
+.profile__avatar-container:hover::before {
+  cursor: pointer;
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8) url(../../../images/edit_pencil.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}

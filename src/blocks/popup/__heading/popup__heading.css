@@ -1,0 +1,18 @@
+.popup__heading {
+  margin: 0;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29px;
+  color: #000000;
+  margin-bottom: 49px;
+}
+
+@media screen and (max-width: 768px) {
+  .popup__heading {
+    margin-bottom: 75px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
