@@ -14,8 +14,8 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { Login } from "./Login";
 import * as auth from "../utils/auth";
 import ProtectedRouteElement from "./ProtectedRoute";
-import tooltipsuccess from "../images/tooltip-success.png"
-import tooltipfail from "../images/tooltip-fail.png"
+import tooltipsuccess from "../images/tooltip-success.png";
+import tooltipfail from "../images/tooltip-fail.png";
 
 function App() {
   const [isInfotooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(false);
@@ -31,21 +31,21 @@ function App() {
 
   const [isInfotooltipSuccessful, setIsInfotooltipSuccessful] = useState({
     image: "",
-    heading: ""
-  })
+    heading: "",
+  });
 
-  function handleSuccess(){
+  function handleSuccess() {
     setIsInfotooltipSuccessful({
       image: tooltipsuccess,
-      heading: "Успех вася"
-    })
+      heading: "Вы успешно зарегистрировались!",
+    });
   }
 
-  function handleFail(){
+  function handleFail() {
     setIsInfotooltipSuccessful({
       image: tooltipfail,
-      heading: "Отсоси"
-    })
+      heading: "Что-то пошло не так! Попробуйте ещё раз.",
+    });
   }
 
   const navigate = useNavigate();
@@ -203,27 +203,53 @@ function App() {
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
-        <Header onLogOut={handleLogout} userEmail={userEmail} />
-
         <Routes>
           <Route
+            exact
             path="/"
             element={
-              <ProtectedRouteElement
-                element={Main}
-                onEditProfile={handleEditProfileClick}
-                onAddPlace={handleAddPlaceClick}
-                onEditAvatar={handleEditAvatarClick}
-                onCardClick={handleCardClick}
-                onCardLike={handleCardLike}
-                cards={cards}
-                onCardDelete={handleCardDelete}
-                loggedIn={loggedIn}
-              />
+              <>
+                <Header
+                  onClick={handleLogout}
+                  userEmail={userEmail}
+                  buttonCaption={"Выйти"}
+                />
+                <ProtectedRouteElement
+                  element={Main}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  cards={cards}
+                  onCardDelete={handleCardDelete}
+                  loggedIn={loggedIn}
+                />
+              </>
             }
           />
-          <Route path="/signup" element={<Register handleInfotooltip={handleInfotooltip} handleSuccess={handleSuccess} handleFail={handleFail}/>} />
-          <Route path="/signin" element={<Login handleLogin={handleLogin} />} />
+          <Route
+           exact path="/signup"
+            element={
+              <>
+                <Header onLogOut={handleLogout} buttonCaption={"Войти"} />
+                <Register
+                  handleInfotooltip={handleInfotooltip}
+                  handleSuccess={handleSuccess}
+                  handleFail={handleFail}
+                />
+              </>
+            }
+          />
+          <Route
+           exact path="/signin"
+            element={
+              <>
+                <Header onLogOut={handleLogout} buttonCaption={"Регистрация"} />
+                <Login handleLogin={handleLogin} />
+              </>
+            }
+          />
         </Routes>
 
         <Footer></Footer>
@@ -253,8 +279,6 @@ function App() {
           onClose={closeAllPopups}
           image={isInfotooltipSuccessful.image}
           title={isInfotooltipSuccessful.heading}
-          // onSuccess={handleSuccess}
-          // onFail={handleFail}
         />
       </CurrentUserContext.Provider>
     </>

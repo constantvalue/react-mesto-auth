@@ -1,6 +1,6 @@
 import logo from "../images/header__logo.svg";
 
-export function Header({ onLogOut, userEmail }) {
+export function Header({ onClick, userEmail, buttonCaption }) {
   return (
     <header className="header">
       <img src={logo} alt="Место лого" className="header__logo" />
@@ -9,8 +9,8 @@ export function Header({ onLogOut, userEmail }) {
         <p
           className="header__navbar-logout"
           type="button"
-          onClick={onLogOut}
-        >Выйти</p>
+          onClick={onClick}
+        >{buttonCaption}</p>
       </div>
     </header>
   );

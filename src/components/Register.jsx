@@ -24,7 +24,7 @@ export const Register = ({ handleInfotooltip, handleSuccess, handleFail }) => {
       auth.signup(formValue.email, formValue.password).then(() => {
         handleInfotooltip();
         handleSuccess()
-        // navigate("/signin", { replace: true });
+        navigate("/signin", { replace: true });
       })
       .catch(() => {
         handleInfotooltip();
