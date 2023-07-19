@@ -10,9 +10,9 @@ import { EditAvatarPopup } from "./EditAvatarPopup";
 import { AddPlacePopup } from "./AddPlacePopup";
 import { InfoTooltip } from "./InfoTooltip";
 import { Register } from "./Register";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { Login } from "./Login";
-import * as auth from "../utils/auth"
+import * as auth from "../utils/auth";
 
 function App() {
   const [isInfotooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(false);
@@ -22,16 +22,14 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-  const [loggedIn, setLoggedIn] = useState();
-  const [userEmail, setUserEmail] = useState("");
+  // const [loggedIn, setLoggedIn] = useState();
+  // const [userEmail, setUserEmail] = useState("");
 
-  const handleLogin = () => {
-    setLoggedIn(true);
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
     handleTokenCheck();
-  }, [])
+  }, []);
 
   //используем хук для запроса данных.
   useEffect(() => {
@@ -153,21 +151,28 @@ function App() {
       });
   }
 
-
-
   const handleTokenCheck = () => {
-    if (localStorage.getItem('jwt')){
-      const jwt = localStorage.getItem('jwt');
-      auth.checkTokenValidity(jwt).then((res) => {
-
-      })
+    if (localStorage.getItem("jwt")) {
+      const jwt = localStorage.getItem("jwt");
+      auth.checkTokenValidity(jwt).then(() => {
+        navigate("/", { replace: true });
+      });
     }
-  }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    navigate("/signin", { replace: true });
+  };
+
+  const handleLogin = () => {
+    handleTokenCheck();
+  };
 
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
-        <Header></Header>
+        <Header onLogOut={handleLogout} />
 
         <Routes>
           <Route
@@ -185,9 +190,7 @@ function App() {
             }
           />
           <Route path="/signup" element={<Register />} />
-          <Route path="/signin" element={<Login />} />
-
-          <Route path="*" />
+          <Route path="/signin" element={<Login onLogin={handleLogin} />} />
         </Routes>
 
         <Footer></Footer>

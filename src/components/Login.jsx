@@ -1,14 +1,15 @@
 import { useState } from "react";
 import * as auth from "../utils/auth.js";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export const Login = ({onLogin}) => {
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
   });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,17 +21,16 @@ export const Login = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (!formValue.username || !formValue.password) {
-    //   return;
-    // }
     auth
       .signin(formValue.email, formValue.password)
       .then((data) => {
         if (data.token) {
           localStorage.setItem("jwt", data.token);
           setFormValue({ email: "", password: "" });
-          navigate("/", { replace: true });
         }
+      })
+      .then(() => {
+        onLogin();
       })
       .catch((err) => console.log(err));
   };
