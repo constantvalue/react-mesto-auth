@@ -75,3 +75,8 @@
 @import url(./blocks/login/__signin/login__signin.css);
 @import url(./blocks/login/__submit-button/login__submit-button.css);
 
+@import url(./blocks/header/__navbar/header__navbar.css);
+@import url(./blocks/header/__navbar-email/header__navbar-email.css);
+@import url(./blocks/header/__navbar-logout/header__navbar-logout.css);
+
+

@@ -21,7 +21,7 @@ export const Register = () => {
     e.preventDefault();
     if (formValue.password !== "") {
       auth.signup(formValue.email, formValue.password).then((res) => {
-        navigate("/", { replace: true });
+        navigate("/signin", { replace: true });
       });
     }
   };

@@ -13,6 +13,7 @@ import { Register } from "./Register";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Login } from "./Login";
 import * as auth from "../utils/auth";
+import ProtectedRouteElement from "./ProtectedRoute";
 
 function App() {
   const [isInfotooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(false);
@@ -22,10 +23,25 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-  // const [loggedIn, setLoggedIn] = useState();
-  // const [userEmail, setUserEmail] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
 
   const navigate = useNavigate();
+
+  //используем хук для запроса данных.
+  useEffect(() => {
+    //условная конструкция выполнит запрос только при значении стейта TRUE
+    if (loggedIn) {
+      api
+        .getUserData()
+        .then((res) => {
+          setCurrentUser(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [loggedIn]);
 
   useEffect(() => {
     handleTokenCheck();
@@ -33,36 +49,20 @@ function App() {
 
   //используем хук для запроса данных.
   useEffect(() => {
-    //этот код выполнится при монтировании компонента.
-    api
-      .getUserData()
-      .then((res) => {
-        setCurrentUser(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    //передаем пустой массив зависимостей
-    //без этого будут бесконечные запросы.
-  }, []);
-
-  //используем хук для запроса данных.
-  useEffect(() => {
-    //этот код выполнится при монтировании компонента.
-    api
-      .getInitialCards()
-      .then((res) => {
-        // cardData.forEach((item) => {
-        //   item.myId = userData._id;
-        // });
-        setCards(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    //передаем пустой массив зависимостей
-    //без этого будут бесконечные запросы.
-  }, []);
+    //условная конструкция выполнит запрос только при значении стейта TRUE
+    if (loggedIn) {
+      api
+        .getInitialCards()
+        .then((res) => {
+          setCards(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      //передаем пустой массив зависимостей
+      //без этого будут бесконечные запросы.
+    }
+  }, [loggedIn]);
 
   function handleCardClick(card) {
     setSelectedCard(card);
@@ -154,7 +154,10 @@ function App() {
   const handleTokenCheck = () => {
     if (localStorage.getItem("jwt")) {
       const jwt = localStorage.getItem("jwt");
-      auth.checkTokenValidity(jwt).then(() => {
+      auth.checkTokenValidity(jwt).then((res) => {
+        setUserEmail(res.data.email);
+        console.log(res.data.email);
+        setLoggedIn(true);
         navigate("/", { replace: true });
       });
     }
@@ -162,7 +165,9 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("jwt");
-    navigate("/signin", { replace: true });
+    setUserEmail("");
+    setLoggedIn(false);
+    // navigate("/signin", { replace: true });
   };
 
   const handleLogin = () => {
@@ -172,13 +177,14 @@ function App() {
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
-        <Header onLogOut={handleLogout} />
+        <Header onLogOut={handleLogout} userEmail={userEmail} />
 
         <Routes>
           <Route
             path="/"
             element={
-              <Main
+              <ProtectedRouteElement
+                element={Main}
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
                 onEditAvatar={handleEditAvatarClick}
@@ -186,11 +192,12 @@ function App() {
                 onCardLike={handleCardLike}
                 cards={cards}
                 onCardDelete={handleCardDelete}
+                loggedIn={loggedIn}
               />
             }
           />
           <Route path="/signup" element={<Register />} />
-          <Route path="/signin" element={<Login onLogin={handleLogin} />} />
+          <Route path="/signin" element={<Login handleLogin={handleLogin} />} />
         </Routes>
 
         <Footer></Footer>
