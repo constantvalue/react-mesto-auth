@@ -14,13 +14,18 @@ import { Route, Routes } from "react-router-dom";
 import { Login } from "./Login";
 
 function App() {
-  const [isInfotooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(true);
+  const [isInfotooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [loggedIn, setLoggedIn] = useState();
+
+  const handleLogin = () => {
+    setLoggedIn(true);
+  };
 
   //используем хук для запроса данных.
   useEffect(() => {
@@ -164,6 +169,7 @@ function App() {
           />
           <Route path="/signup" element={<Register />} />
           <Route path="/signin" element={<Login />} />
+
           <Route path="*" />
         </Routes>
 

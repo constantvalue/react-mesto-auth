@@ -1,19 +1,65 @@
-export function Login(props) {
+import { useState } from "react";
+import * as auth from "../utils/auth.js";
+import { useNavigate } from "react-router-dom";
+
+export const Login = () => {
+  const [formValue, setFormValue] = useState({
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormValue({
+      ...formValue,
+      [name]: value,
+    });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // if (!formValue.username || !formValue.password) {
+    //   return;
+    // }
+    auth
+      .signin(formValue.email, formValue.password)
+      .then((data) => {
+        if (data.jwt) {
+          setFormValue({ email: "", password: "" });
+          // handleLogin();
+          navigate("/", { replace: true });
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div className="login">
-      <form className="login__form">
+      <form
+        className="login__form"
+        name="login__form"
+        id="login__form"
+        onSubmit={handleSubmit}
+      >
         <h2 className="login__heading">Вход</h2>
         <div className="login__inputs">
           <input
             className="login__input"
             placeholder="Email"
             type="email"
+            name="email"
+            value={formValue.email}
+            onChange={handleChange}
             required
           ></input>
           <input
             className="login__input"
             placeholder="Пароль"
             type="password"
+            name="password"
+            value={formValue.password}
+            onChange={handleChange}
             required
           ></input>
         </div>
@@ -23,4 +69,4 @@ export function Login(props) {
       </form>
     </div>
   );
-}
+};
