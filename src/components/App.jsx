@@ -10,7 +10,7 @@ import { EditAvatarPopup } from "./EditAvatarPopup";
 import { AddPlacePopup } from "./AddPlacePopup";
 import { InfoTooltip } from "./InfoTooltip";
 import { Register } from "./Register";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { Login } from "./Login";
 import * as auth from "../utils/auth";
 import ProtectedRouteElement from "./ProtectedRoute";
@@ -200,6 +200,14 @@ function App() {
     handleTokenCheck();
   };
 
+  const navigateToSignIn = () => {
+    navigate("/signin", { replace: true });
+  };
+
+  const navigateToSignUp = () => {
+    navigate("/signup", { replace: true });
+  };
+
   return (
     <>
       <CurrentUserContext.Provider value={currentUser}>
@@ -229,10 +237,11 @@ function App() {
             }
           />
           <Route
-           exact path="/signup"
+            exact
+            path="/signup"
             element={
               <>
-                <Header onLogOut={handleLogout} buttonCaption={"Войти"} />
+                <Header onClick={navigateToSignIn} buttonCaption={"Войти"} />
                 <Register
                   handleInfotooltip={handleInfotooltip}
                   handleSuccess={handleSuccess}
@@ -242,10 +251,14 @@ function App() {
             }
           />
           <Route
-           exact path="/signin"
+            exact
+            path="/signin"
             element={
               <>
-                <Header onLogOut={handleLogout} buttonCaption={"Регистрация"} />
+                <Header
+                  onClick={navigateToSignUp}
+                  buttonCaption={"Регистрация"}
+                />
                 <Login handleLogin={handleLogin} />
               </>
             }

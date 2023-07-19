@@ -27,14 +27,6 @@ export const signin = (email, password) => {
     },
     body: JSON.stringify({ email, password }),
   }).then(returnResponse);
-  // .then((data) => {
-  //   if (data.token) {
-  //     localStorage.setItem("jwt", data.jwt);
-  //     return data;
-  //   }
-  // })
-
-  // .catch((err) => console.log(err));
 };
 
 export const checkTokenValidity = (token) => {
