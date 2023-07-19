@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as auth from "../utils/auth.js";
 
-export const Register = () => {
+export const Register = ({ handleInfotooltip, handleSuccess, handleFail }) => {
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
@@ -17,12 +17,19 @@ export const Register = () => {
       [name]: value,
     });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formValue.password !== "") {
-      auth.signup(formValue.email, formValue.password).then((res) => {
-        navigate("/signin", { replace: true });
-      });
+      auth.signup(formValue.email, formValue.password).then(() => {
+        handleInfotooltip();
+        handleSuccess()
+        // navigate("/signin", { replace: true });
+      })
+      .catch(() => {
+        handleInfotooltip();
+        handleFail()
+      })
     }
   };
 

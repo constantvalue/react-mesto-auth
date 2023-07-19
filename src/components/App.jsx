@@ -14,9 +14,12 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { Login } from "./Login";
 import * as auth from "../utils/auth";
 import ProtectedRouteElement from "./ProtectedRoute";
+import tooltipsuccess from "../images/tooltip-success.png"
+import tooltipfail from "../images/tooltip-fail.png"
 
 function App() {
   const [isInfotooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(false);
+
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -25,6 +28,25 @@ function App() {
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState("");
+
+  const [isInfotooltipSuccessful, setIsInfotooltipSuccessful] = useState({
+    image: "",
+    heading: ""
+  })
+
+  function handleSuccess(){
+    setIsInfotooltipSuccessful({
+      image: tooltipsuccess,
+      heading: "Успех вася"
+    })
+  }
+
+  function handleFail(){
+    setIsInfotooltipSuccessful({
+      image: tooltipfail,
+      heading: "Отсоси"
+    })
+  }
 
   const navigate = useNavigate();
 
@@ -78,6 +100,10 @@ function App() {
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
+  }
+
+  function handleInfotooltip() {
+    setIsInfotooltipPopupOpen(true);
   }
 
   //эта функция будет вызываться на каждом компоненте с попапом. Служит для закрытия по клику на крестик.
@@ -196,7 +222,7 @@ function App() {
               />
             }
           />
-          <Route path="/signup" element={<Register />} />
+          <Route path="/signup" element={<Register handleInfotooltip={handleInfotooltip} handleSuccess={handleSuccess} handleFail={handleFail}/>} />
           <Route path="/signin" element={<Login handleLogin={handleLogin} />} />
         </Routes>
 
@@ -225,7 +251,10 @@ function App() {
           name={"popup-tooltip"}
           isOpen={isInfotooltipPopupOpen}
           onClose={closeAllPopups}
-          title={"Вы успешно зарегистрировались!"}
+          image={isInfotooltipSuccessful.image}
+          title={isInfotooltipSuccessful.heading}
+          // onSuccess={handleSuccess}
+          // onFail={handleFail}
         />
       </CurrentUserContext.Provider>
     </>
