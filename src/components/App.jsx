@@ -19,7 +19,6 @@ import tooltipfail from "../images/tooltip-fail.png";
 
 function App() {
   const [isInfotooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(false);
-
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -65,6 +64,7 @@ function App() {
     }
   }, [loggedIn]);
 
+  //проверяем токен единожды.
   useEffect(() => {
     handleTokenCheck();
   }, []);
