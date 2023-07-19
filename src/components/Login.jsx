@@ -26,9 +26,9 @@ export const Login = () => {
     auth
       .signin(formValue.email, formValue.password)
       .then((data) => {
-        if (data.jwt) {
+        if (data.token) {
+          localStorage.setItem("jwt", data.token);
           setFormValue({ email: "", password: "" });
-          // handleLogin();
           navigate("/", { replace: true });
         }
       })

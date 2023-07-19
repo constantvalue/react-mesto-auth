@@ -43,3 +43,14 @@ export const signin = (email, password) => {
 
     .catch((err) => console.log(err));
 };
+
+export const checkTokenValidity = (token) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((response) => response.json());
+
+};

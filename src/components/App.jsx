@@ -12,6 +12,7 @@ import { InfoTooltip } from "./InfoTooltip";
 import { Register } from "./Register";
 import { Route, Routes } from "react-router-dom";
 import { Login } from "./Login";
+import * as auth from "../utils/auth"
 
 function App() {
   const [isInfotooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(false);
@@ -22,10 +23,15 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState();
+  const [userEmail, setUserEmail] = useState("");
 
   const handleLogin = () => {
     setLoggedIn(true);
   };
+
+  useEffect(() => {
+    handleTokenCheck();
+  }, [])
 
   //используем хук для запроса данных.
   useEffect(() => {
@@ -145,6 +151,17 @@ function App() {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+
+
+  const handleTokenCheck = () => {
+    if (localStorage.getItem('jwt')){
+      const jwt = localStorage.getItem('jwt');
+      auth.checkTokenValidity(jwt).then((res) => {
+
+      })
+    }
   }
 
   return (
