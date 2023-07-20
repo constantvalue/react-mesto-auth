@@ -18,7 +18,7 @@ import tooltipSuccess from "../images/tooltip-success.png";
 import tooltipFail from "../images/tooltip-fail.png";
 
 function App() {
-  const [isInfotooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(false);
+  const [isInfoTooltipPopupOpen, setIsInfotooltipPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -49,10 +49,12 @@ function App() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    handleTokenCheck();
+  }, []);
+
   //используем хук для запроса данных.
   useEffect(() => {
-    //проверяю токен один раз при монтировании.
-    handleTokenCheck();
     //условная конструкция выполнит запрос только при значении стейта TRUE
     if (loggedIn) {
       api
@@ -178,13 +180,14 @@ function App() {
 
   const handleTokenCheck = () => {
     const jwt = localStorage.getItem("jwt");
-    if (localStorage.getItem("jwt")) {
+    if (jwt) {
       auth
         .checkTokenValidity(jwt)
         .then((res) => {
-          setUserEmail(res.data.email);
-          setLoggedIn(true);
-          navigate("/", { replace: true });
+          // setUserEmail(res.data.email);
+          // setLoggedIn(true);
+          // navigate("/", { replace: true });
+          handleLogin(res.data.email);
         })
         .catch((error) => {
           console.log(error);
@@ -198,7 +201,8 @@ function App() {
     setLoggedIn(false);
   };
 
-  const handleLogin = () => {
+  const handleLogin = (email) => {
+    setUserEmail(email)
     setLoggedIn(true);
     navigate("/", { replace: true });
   };
@@ -270,7 +274,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace={true} />} />
       </Routes>
 
-      <Footer/>
+      <Footer />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
@@ -293,7 +297,7 @@ function App() {
 
       <InfoTooltip
         name={"popup-tooltip"}
-        isOpen={isInfotooltipPopupOpen}
+        isOpen={isInfoTooltipPopupOpen}
         onClose={closeAllPopups}
         image={infoTooltipState.image}
         title={infoTooltipState.heading}

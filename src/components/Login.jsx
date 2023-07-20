@@ -23,7 +23,7 @@ export const Login = ({ handleLogin }) => {
         if (data.token) {
           localStorage.setItem("jwt", data.token);
           setFormValue({ email: "", password: "" });
-          handleLogin();
+          handleLogin(formValue.email);
         }
       })
 
