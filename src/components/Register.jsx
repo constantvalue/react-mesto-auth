@@ -21,7 +21,7 @@ export const Register = ({ handleInfotooltip, handleSuccess, handleFail }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formValue.password !== "") {
-      auth.signup(formValue.email, formValue.password).then(() => {
+      auth.signUp(formValue.email, formValue.password).then(() => {
         handleInfotooltip();
         handleSuccess()
         navigate("/signin", { replace: true });

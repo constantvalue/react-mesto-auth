@@ -8,7 +8,6 @@ export function Header({ onClick, userEmail, buttonCaption }) {
         <p className="header__navbar-email">{userEmail}</p>
         <p
           className="header__navbar-logout"
-          type="button"
           onClick={onClick}
         >{buttonCaption}</p>
       </div>

@@ -26,7 +26,7 @@ class Api {
     );
   }
 
-  userInfoPatch(data) {
+  updateUserInfo (data) {
     return fetch(this._baseUrl + "/users/me", {
       headers: this._headers,
       method: "PATCH",
@@ -58,7 +58,7 @@ class Api {
     }).then(this._returnResponse);
   }
 
-  cardDelete(card) {
+  deleteCard(card) {
     return fetch(this._baseUrl + "/cards/" + card._id, {
       headers: this._headers,
       method: "DELETE",
